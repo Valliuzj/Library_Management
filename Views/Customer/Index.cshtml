@@ -1,0 +1,25 @@
+@model List<LibraryManagement.Models.Customer>
+
+<h2> Customers </h2>
+<a href="@Url.Action("create","Customer")" class="btn btn-primary">Add New Customer</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> Customer ID</th>
+            <th> Name </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            <tr>
+                <td> @customer.CustomerId </td>
+                <td>@customer.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Customer", new { id = customer.CustomerId })" class="btn btn-info">Edit</a> |
+                    <a href="@Url.Action("Delete", "Customer", new { id = customer.CustomerId })" class="btn btn-info">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>

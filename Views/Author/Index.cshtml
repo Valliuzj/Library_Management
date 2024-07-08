@@ -1,0 +1,25 @@
+@model List<LibraryManagement.Models.Author>
+
+<h2> Authors </h2>
+<a href="@Url.Action("create","Author")" class="btn btn-primary">Add New Author</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> Author ID</th>
+            <th> Name </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var author in Model)
+        {
+            <tr>
+                <td> @author.AuthorId </td>
+                <td>@author.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Author", new { id = author.AuthorId })" class="btn btn-info">Edit</a> |
+                    <a href="@Url.Action("Delete", "Author", new { id = author.AuthorId })" class="btn btn-info">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>

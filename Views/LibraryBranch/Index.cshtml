@@ -1,0 +1,25 @@
+@model List<LibraryManagement.Models.LibraryBranch>
+
+<h2> Library Branches </h2>
+<a href="@Url.Action("create","LibraryBranch")" class="btn btn-primary">Add New Library Branch</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> Library Branch ID</th>
+            <th> Branch Name </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var branch in Model)
+        {
+            <tr>
+                <td> @branch.LibraryBranchId </td>
+                <td>@branch.BranchName</td>
+                <td>
+                    <a href="@Url.Action("Edit", "LibraryBranch", new { id = branch.LibraryBranchId })" class="btn btn-info">Edit</a> |
+                    <a href="@Url.Action("Delete", "LibraryBranch", new { id = branch.LibraryBranchId })" class="btn btn-info">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
