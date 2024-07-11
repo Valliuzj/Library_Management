@@ -33,12 +33,12 @@ namespace LibraryManagement.Controllers{
 
         public IActionResult Edit(int? id){
             if (id == null){
-                return NotFound();
+                throw new CustomValidationException("Customer ID is required.");
             }
 
             var customer = _dbContext.Customers.Find(id);
             if (customer == null){
-                return NotFound();
+                throw new ResourceNotFoundException("Customer not found.");
             }
 
             return View(customer);
@@ -47,7 +47,7 @@ namespace LibraryManagement.Controllers{
         [HttpPost]
         public IActionResult Edit(int id,[Bind("CustomerId,Name")] Customer customer){
             if (id != customer.CustomerId){
-                return NotFound();
+                throw new ResourceNotFoundException("Customer not found.");
             }
 
             if (ModelState.IsValid){
@@ -56,7 +56,7 @@ namespace LibraryManagement.Controllers{
                     _dbContext.SaveChanges();
                 }catch (DbUpdateConcurrencyException){
                     if (!_dbContext.Customers.Any(e => e.CustomerId == id)){
-                        return NotFound();
+                        throw new ResourceNotFoundException("Customer not found.");
                     }else{
                         throw;
                     }
@@ -69,7 +69,7 @@ namespace LibraryManagement.Controllers{
         public IActionResult Delete(int id){
             var customer = _dbContext.Customers.Find(id);
             if (customer == null){
-                return NotFound();
+                throw new ResourceNotFoundException("Customer not found.");
             }
             _dbContext.Customers.Remove(customer);
             _dbContext.SaveChanges();

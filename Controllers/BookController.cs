@@ -42,13 +42,13 @@ namespace LibraryManagement.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                throw new CustomValidationException("Book ID is required.");
             }
 
             var book = _dbContext.Books.Find(id);
             if (book == null)
             {
-                return NotFound();
+                throw new ResourceNotFoundException("Book not found.");
             }
 
             return View(book);
@@ -57,9 +57,13 @@ namespace LibraryManagement.Controllers
         [HttpPost]
         public IActionResult Edit(int id,[Bind("BookId,AuthorId,Title,LibraryBranchId")] Book Book)
         {
+            if (id == null)
+            {
+                throw new CustomValidationException("Book ID is required.");
+            }
             if (id != Book.BookId)
             {
-                return NotFound();
+                throw new ResourceNotFoundException("Book not found.");
             }
             if (ModelState.IsValid)
             {
@@ -72,7 +76,7 @@ namespace LibraryManagement.Controllers
                 {
                     if (!_dbContext.Books.Any(e => e.BookId == id))
                     {
-                        return NotFound();
+                        throw new ResourceNotFoundException("Book not found.");
                     }
                     else
                     {
@@ -90,7 +94,7 @@ namespace LibraryManagement.Controllers
             var book = _dbContext.Books.Find(id);
             if (book == null)
             {
-                return NotFound();
+                throw new ResourceNotFoundException("Book not found.");
             }
             _dbContext.Books.Remove(book);
             _dbContext.SaveChanges();

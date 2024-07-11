@@ -37,12 +37,12 @@ namespace LibraryManagement.Controllers{
         // GET: LibraryBranch/Edit/:id
         public IActionResult Edit(int? id){
             if (id == null){
-                return NotFound();
+                throw new ResourceNotFoundException("Library Branch ID is required.");
             }
 
             var libraryBranch = _dbContext.LibraryBranches.Find(id);
             if (libraryBranch == null){
-                return NotFound();
+                throw new ResourceNotFoundException("Library Branch not found.");
             }
 
             return View(libraryBranch);
@@ -52,7 +52,7 @@ namespace LibraryManagement.Controllers{
         [HttpPost]
         public IActionResult Edit(int id, [Bind("LibraryBranchId,BranchName")] LibraryBranch libraryBranch){
             if (id != libraryBranch.LibraryBranchId){
-                return NotFound();
+                throw new ResourceNotFoundException("Library Branch not found.");
             }
 
             if (ModelState.IsValid){
@@ -63,7 +63,7 @@ namespace LibraryManagement.Controllers{
 
                 }catch (DbUpdateConcurrencyException){
                     if (!_dbContext.LibraryBranches.Any(e => e.LibraryBranchId == id)){
-                        return NotFound();
+                        throw new ResourceNotFoundException("Library Branch not found.");
                     }else{
                         throw;
                     }
@@ -74,9 +74,12 @@ namespace LibraryManagement.Controllers{
 
         // GET: LibraryBranch/Delete/:id
         public IActionResult Delete(int? id){
+            if (id == null){
+                throw new CustomValidationException("Library Branch ID is required.");
+            }
             var branch = _dbContext.LibraryBranches.Find(id);
             if (branch == null){
-                return NotFound();
+                throw new ResourceNotFoundException("Library Branch not found.");
             }
             _dbContext.LibraryBranches.Remove(branch);
             _dbContext.SaveChanges();

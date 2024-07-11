@@ -41,13 +41,13 @@ namespace LibraryManagement.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                throw new CustomValidationException("Author ID is required.");
             }
 
             var author = _dbContext.Authors.Find(id);
             if (author == null)
             {
-                return NotFound();
+                throw new ResourceNotFoundException("Author not found.");
             }
 
             return View(author);
@@ -58,7 +58,7 @@ namespace LibraryManagement.Controllers
         {
             if (id != author.AuthorId)
             {
-                return NotFound();
+                throw new CustomValidationException("Author ID is required.");
             }
             if (ModelState.IsValid)
             {
@@ -88,13 +88,13 @@ namespace LibraryManagement.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                throw new CustomValidationException("Author ID is required.");
             }
 
             var author = _dbContext.Authors.Find(id);
             if (author == null)
             {
-                return NotFound();
+                throw new ResourceNotFoundException("Author not found.");
             }
             _dbContext.Authors.Remove(author);
             _dbContext.SaveChanges();
