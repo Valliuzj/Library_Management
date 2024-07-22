@@ -1,13 +1,12 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
 namespace LibraryManagement.Models;
 
-public class ErrorModel : PageModel
+public class ErrorModel
 {
     public int StatusCode { get; set; }
     public string Message { get; set; }
     public string Details { get; set; }
+    public string? RequestId { get; set; }
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
     private readonly ILogger<ErrorModel> _logger;
 
@@ -26,12 +25,5 @@ public class ErrorModel : PageModel
         Message = message;
         Details = details;
     }
-   
-    public void OnGet(int statusCode)
-    {
-        StatusCode = statusCode;
-        Message = "An error occurred while processing your request.";
-        Details = "Detailed information can be displayed here.";
-        _logger.LogError($"Error {statusCode}: {Message}");
-    }
+       
 }

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using LibraryManagement;
+using System.Web;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,9 +82,29 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    // app.UseDeveloperExceptionPage();
+    app.UseExceptionHandler(errorApp =>
+    {
+        errorApp.Run(async context =>
+        {
+            context.Response.StatusCode = 999; 
+            var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionHandlerPathFeature?.Error is ResourceNotFoundException)
+            {
+                context.Response.StatusCode = 404; 
+            }
+            else if (exceptionHandlerPathFeature?.Error is CustomValidationException)
+            {
+                context.Response.StatusCode = 400; 
+            }
+            // Pass the status code to the error handling action
+            context.Response.Redirect(
+                $"/Home/Error?statusCode={context.Response.StatusCode}&message={exceptionHandlerPathFeature?.Error.Message}&details={HttpUtility.UrlEncode(exceptionHandlerPathFeature?.Error.StackTrace)}");
+        });
+    });
+} else {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -94,7 +116,7 @@ app.UseSwaggerUI(c =>
     // c.RoutePrefix = "";
 });
 
-app.UseMiddleware<ExceptionHandler>();
+//app.UseMiddleware<ExceptionHandler>();
 
 app.UseStatusCodePages();
 app.UseHttpsRedirection();

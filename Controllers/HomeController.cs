@@ -24,9 +24,17 @@ public class HomeController : Controller
         throw new CustomValidationException("This is a custom validation exception.");
     }
 
-    // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    // public IActionResult Error()
-    // {
-    //     return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    // }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error(int? statusCode, string? message, string? details)
+    {
+        _logger.LogError("====Error: " + statusCode);
+        var errorModel = new ErrorModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+            StatusCode = statusCode?? 9999,
+            Message = message ?? string.Empty,
+            Details = details ?? string.Empty,
+        };
+        return View(errorModel);
+    }
 }

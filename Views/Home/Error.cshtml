@@ -12,3 +12,10 @@
     <h3>Details:</h3>
     <pre>@Model.Details</pre>
 }
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p >
+}

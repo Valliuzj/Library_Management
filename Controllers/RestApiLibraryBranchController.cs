@@ -37,6 +37,11 @@ namespace LibraryManagement.Controllers
         }
 
         // GET: api/LibraryBranches/5
+        /// <summary>
+        /// Get a single library branch by its identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the library branch to retrieve.</param>
+        /// <returns>An ActionResult containing the library branch if found, or a NotFound result if not found or if the library branches data is unavailable.</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [SwaggerOperation(Summary = "Get single library branch by id.")]
