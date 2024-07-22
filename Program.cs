@@ -15,6 +15,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
     // options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
+// Register the Swagger generator
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
@@ -115,8 +116,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryManagement v1.0");
     // c.RoutePrefix = "";
 });
-
-//app.UseMiddleware<ExceptionHandler>();
 
 app.UseStatusCodePages();
 app.UseHttpsRedirection();

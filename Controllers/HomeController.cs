@@ -27,7 +27,6 @@ public class HomeController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error(int? statusCode, string? message, string? details)
     {
-        _logger.LogError("====Error: " + statusCode);
         var errorModel = new ErrorModel
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
